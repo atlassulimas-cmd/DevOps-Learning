@@ -18,14 +18,26 @@ function Get-OSInfo {
 
 function Get-Uptime {
     try {
-        $lastBoot = (Get-CimInstance Win32_OperatingSystem -ErrorAction Stop).LastBootUpTime
-        $uptime = (Get-Date) - $lastBoot
+        # Отримуємо дані про систему
+        $os = Get-CimInstance Win32_OperatingSystem -ErrorAction Stop
         
-        Write-Host "--- Uptime ---" -ForegroundColor Cyan
-        Write-Host "System works: $($uptime.Days) days, $($uptime.Hours) hours and $($uptime.Minutes) minutes"
+        # Переконуємось, що ми працюємо з датою
+        $lastBoot = $os.LastBootUpTime
+        $now = Get-Date
+        
+        # Розраховуємо різницю
+        $uptime = $now - $lastBoot
+        
+        Write-Host "--- (Uptime) ---" -ForegroundColor Cyan
+        
+        # Перевірка: чи не порожній результат
+        if ($null -ne $uptime) {
+             Write-Host "Last boot: $lastBoot" -ForegroundColor Gray
+             Write-Host "System works: $($uptime.Days) days, $($uptime.Hours) hours, $($uptime.Minutes) min"
+        }
     }
     catch {
-        Write-Warning "Can't calculate Uptime."
+        Write-Warning "Error: $($_.Exception.Message)"
     }
 }
 
