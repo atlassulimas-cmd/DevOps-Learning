@@ -1,3 +1,4 @@
+Write-Host "=== System report 1 ===" -ForegroundColor Green
 # 1. Визначаємо змінні (це зручно для подальших змін)
 $rgName = "Atlas-Lab-RG"
 $location = "westeurope" # Західна Європа - стабільний регіон для України
